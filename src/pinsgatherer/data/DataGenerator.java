@@ -22,7 +22,7 @@ public class DataGenerator {
 	);
 
 	private final List<String> provinces = new ArrayList<String>(
-			Arrays.asList("Buenos Aires")
+			Arrays.asList("Jujuy", "Formosa", "Misiones")
 	);
 	
 	private final List<String> teams = new ArrayList<String>(
