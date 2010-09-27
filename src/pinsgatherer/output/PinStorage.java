@@ -23,6 +23,8 @@ public class PinStorage {
 		
 		// Append
 		root.appendChild(newElement);
+		
+		XMLHelper.writeXmlFile(document, "pins.xml");
 	}
 	
 	// Kind of Singleton for the document, create on demand
