@@ -54,7 +54,7 @@ public class DataGenerator {
 	}
 	
 	private String getRandomValue(List<String> fromList) {
-		int index = new Random().nextInt(fromList.size() - 1);
+		int index = new Random().nextInt(fromList.size());
 		return fromList.get(index);
 	}
 }

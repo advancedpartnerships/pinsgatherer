@@ -21,7 +21,7 @@ public class FormGenerator {
             String dni = String.valueOf(randomDni);
             form.setDni(dni);
             form.setMail("ps"+dni+"@mailinator.com");
-            form.setCellPhone("15"+dni);
+            form.setCellPhone("11"+dni);
 
             form.setBirthdateDay(String.valueOf(availablePins%28 + 1));
             form.setBirthdateMonth(String.valueOf(availablePins%12 + 1));
@@ -34,7 +34,7 @@ public class FormGenerator {
             form.setHobbieSport(gen.getRandomSport());
             form.setProvince(gen.getRandomProvince());
 
-			forms.add(new Form());
+			forms.add(form);
 		}
 		
 		return forms;
