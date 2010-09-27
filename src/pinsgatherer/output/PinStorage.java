@@ -10,7 +10,7 @@ public class PinStorage {
 	
 	private static Document document = null;
 	
-	public static void addPin(String mail, String pin) {
+	public static void addPin(String email, String pin) {
 		// Get the pins document
 		Document document = getDocument();
 		
@@ -19,7 +19,7 @@ public class PinStorage {
 		
 		// Create new pin element with the pin info
 		Element newElement = document.createElement("pin");
-		newElement.setAttribute("email", mail);
+		newElement.setAttribute("email", email);
 		newElement.setTextContent(pin);
 		
 		// Append
