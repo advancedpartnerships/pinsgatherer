@@ -3,6 +3,7 @@ package pinsgatherer.output;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import pinsgatherer.helper.PropertiesManager;
 import pinsgatherer.helper.XMLHelper;
 
 public class PinStorage {
@@ -23,8 +24,7 @@ public class PinStorage {
 		
 		// Append
 		root.appendChild(newElement);
-		
-		XMLHelper.writeXmlFile(document, "pins.xml");
+		XMLHelper.writeXmlFile(document, PropertiesManager.getProperty("pins_filename"));
 	}
 	
 	// Kind of Singleton for the document, create on demand
