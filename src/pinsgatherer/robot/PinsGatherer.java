@@ -148,8 +148,9 @@ public class PinsGatherer extends SeleneseTestCase {
             	
     	// TODO dani's flash code to get the pin
         
+        // Store pin
     	String pin = null;
-    	PinStorage.addPin(pin);
+    	PinStorage.addPin(email, pin);
     }
     
     private String getPinUrlCode(String emailContent) {

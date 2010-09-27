@@ -21,7 +21,7 @@ public class PinStorageTest extends TestCase {
 		final String pin = "RFJTHE4HT24";
 		
 		// Store the pin
-		PinStorage.addPin(pin);
+		PinStorage.addPin("pepito@mailinatore", pin);
 		
 		// Validate pin inside document
 		// Get document
