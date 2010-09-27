@@ -1,18 +1,16 @@
 package pinsgatherer.robot;
 
-import java.util.List;
-
+import com.thoughtworks.selenium.DefaultSelenium;
+import com.thoughtworks.selenium.SeleneseTestCase;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
 import pinsgatherer.data.Form;
 import pinsgatherer.data.FormGenerator;
 import pinsgatherer.server.ServerManager;
 import pinsgatherer.sikuli.SikuliScripts;
 
-import com.thoughtworks.selenium.DefaultSelenium;
-import com.thoughtworks.selenium.SeleneseTestCase;
+import java.util.List;
 
 /**
  * This class simulates a person opening http://www.elsantoregalapines.com/,
@@ -64,7 +62,7 @@ public class PinsGatherer extends SeleneseTestCase {
         // Create random forms
         final List<Form> forms = FormGenerator.generateForms(MAX_PINS);
         
-        for (Form form : forms) {
+        /*for (Form form : forms) {
         	// Open http://www.elsantoregalapines.com/
             selenium.open("/");
 
@@ -72,7 +70,8 @@ public class PinsGatherer extends SeleneseTestCase {
             selenium.waitForPageToLoad("30000");
             
             completeForm(form);
-        }
+        }*/
+        completeForm(forms.get(0));
     }
 
     /**
