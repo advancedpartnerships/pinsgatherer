@@ -14,33 +14,23 @@ import java.util.Random;
 public class DataGenerator {
 	
 	private final List<String> names = new ArrayList<String>(
-			Arrays.asList(new String[] { 
-					"Diego", "Martin", "Carlos" 
-			})
+			Arrays.asList("Diego", "Martin", "Carlos")
 	);
 	
 	private final List<String> surnames = new ArrayList<String>(
-			Arrays.asList(new String[] { 
-					"Perez", "Donofilio", "Arota" 
-			})
+			Arrays.asList("Perez", "Donofilio", "Arota")
 	);
 
 	private final List<String> provinces = new ArrayList<String>(
-			Arrays.asList(new String[] { 
-					"Buenos Aires", "Formosa", "Salta" 
-			})
+			Arrays.asList("Buenos Aires")
 	);
 	
 	private final List<String> teams = new ArrayList<String>(
-			Arrays.asList(new String[] { 
-					"River", "Boca", "Arsenal" 
-			})
+			Arrays.asList("Boca")
 	);
 	
 	private final List<String> sports = new ArrayList<String>(
-			Arrays.asList(new String[] { 
-					"Futbol", "Hockey", "Rugby" 
-			})
+			Arrays.asList("Futbol", "Hockey", "Rugby")
 	);
 	
 	public String getRandomName() {
