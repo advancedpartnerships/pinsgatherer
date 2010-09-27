@@ -7,6 +7,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import pinsgatherer.data.Form;
 import pinsgatherer.data.FormGenerator;
+import pinsgatherer.exceptions.ElementNotFoundException;
+import pinsgatherer.exceptions.NoEmailException;
 import pinsgatherer.output.PinStorage;
 import pinsgatherer.server.ServerManager;
 import pinsgatherer.sikuli.SikuliScripts;
@@ -64,15 +66,22 @@ public class PinsGatherer extends SeleneseTestCase {
         final List<Form> forms = FormGenerator.generateForms(MAX_PINS);
         
         for (Form form : forms) {
-        	// Open http://www.elsantoregalapines.com/
-            selenium.open("/");
+        	try {
+            	// Open http://www.elsantoregalapines.com/
+                selenium.open("/");
 
-            // Wait for page to load
-            selenium.waitForPageToLoad("30000");
-            
-            completeForm(form);
-            
-            storePin(form);
+                // Wait for page to load
+                selenium.waitForPageToLoad("30000");
+                
+                // Complete the form with fake data
+                completeForm(form);
+                
+                // Find and store the pin
+                findAndStorePin(form);
+                
+        	} catch (Exception e) {
+        		e.printStackTrace();
+        	}
         }
     }
 
@@ -102,32 +111,25 @@ public class PinsGatherer extends SeleneseTestCase {
         return SikuliScripts.getScripts().recoverPin();
 	}
     
-    private void storePin(Form form) {
+    private void findAndStorePin(Form form) {
     	
     	// Get form's email
     	String email = form.getMail();
     	email = email.split("@mailinator.com")[0];
     	
-    	// Build email url
-    	String url = "http://" + email + ".mailinator.com";
+    	// Open mailinator's email inbox
+    	openMailinatorUrl(email);
     	
-    	// Open url in new window
-    	selenium.openWindow(url, "mailinator");
-    	selenium.waitForPopUp("mailinator", "30000");
-    	selenium.selectWindow("mailinator");
+    	// Open new pin email
+    	try {
+			openEmail("link=Tu pin de regalo");
+		} catch (NoEmailException e) {
+			e.printStackTrace();
+			return;
+		}
     	
-    	// Open new email
-    	String mailLinkLocator = "link=Tu pin de regalo";
-    	waitForElement(mailLinkLocator, "30000");
-    	selenium.click(mailLinkLocator);
-
-    	// Get email content
-    	String emailContentLoctor = "//div[@id='message']";
-    	waitForElement(emailContentLoctor, "30000");
-    	
-    	String emailContent = selenium.getText(emailContentLoctor);
-    	
-    	String pinUrlCode = getPinUrlCode(emailContent);
+		// Get pin's code from email
+    	String pinUrlCode = getPinUrlCode();
     	
     	// Close mailinator and return to previous window
     	selenium.close();
@@ -135,16 +137,51 @@ public class PinsGatherer extends SeleneseTestCase {
 
     	// Open http://www.elsantoregalapines.com/
         selenium.open("/" + pinUrlCode);
-
+        
         // Wait for page to load
         selenium.waitForPageToLoad("30000");
             	
-        // Store pin
+        // Recover and store pin
     	String pin = recoverPin();
     	PinStorage.addPin(email, pin);
     }
+
+	private void openMailinatorUrl(String email) {
+		// Build email url
+    	String url = "http://" + email + ".mailinator.com";
+    	
+    	// Open url in new window
+    	selenium.openWindow(url, "mailinator");
+    	selenium.waitForPopUp("mailinator", "30000");
+    	selenium.selectWindow("mailinator");
+	}
+
+	private String getEmailContent() {
+		String emailContentLoctor = "//div[@id='message']";
+    	try {
+			waitForElement(emailContentLoctor, "30000");
+		} catch (ElementNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
+		return selenium.getText(emailContentLoctor);
+	}
+
+	private void openEmail(String emailLinkLocator) throws NoEmailException {
+		try {
+			waitForElement(emailLinkLocator, "30000");
+		} catch (ElementNotFoundException e) {
+			throw new NoEmailException();
+		}
+	}
     
-    private String getPinUrlCode(String emailContent) {
+    private String getPinUrlCode() {
+    	// Get email content
+    	String emailContent = getEmailContent();
+    	if (emailContent == null) {
+    		return null;
+    	}
+    	
     	String[] contents = emailContent.split("ingresa a ");
     	
     	String[] pinUrl = contents[1].split(".com/");
@@ -155,11 +192,11 @@ public class PinsGatherer extends SeleneseTestCase {
     	return code;
     }
     
-    private void waitForElement(String locator, String timeout) {
+    private void waitForElement(String locator, String timeout) throws ElementNotFoundException {
     	int seconds = Integer.valueOf(timeout) / 1000;
     	for (int second = 0;; second++) {
     		if (second >= seconds) {
-    			fail("Email not found");
+    			throw new ElementNotFoundException(locator);
     		}
     		if (selenium.isElementPresent(locator)) {
     			break;
@@ -171,4 +208,5 @@ public class PinsGatherer extends SeleneseTestCase {
 			}
     	}
     }
+
 }
