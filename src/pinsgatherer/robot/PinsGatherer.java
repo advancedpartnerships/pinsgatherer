@@ -1,16 +1,18 @@
 package pinsgatherer.robot;
 
-import com.thoughtworks.selenium.DefaultSelenium;
-import com.thoughtworks.selenium.SeleneseTestCase;
+import java.util.List;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
 import pinsgatherer.data.Form;
 import pinsgatherer.data.FormGenerator;
 import pinsgatherer.server.ServerManager;
 import pinsgatherer.sikuli.SikuliScripts;
 
-import java.util.List;
+import com.thoughtworks.selenium.DefaultSelenium;
+import com.thoughtworks.selenium.SeleneseTestCase;
 
 /**
  * This class simulates a person opening http://www.elsantoregalapines.com/,
@@ -18,6 +20,9 @@ import java.util.List;
  */
 
 public class PinsGatherer extends SeleneseTestCase {
+	
+	// Available pins.
+	private static final int MAX_PINS = 150000;
 
     /**
      * This method runs before the class is executed. It starts the selenium server
@@ -56,18 +61,16 @@ public class PinsGatherer extends SeleneseTestCase {
 
     @Test
     public void testPinsGatherer() {
-        // Open http://www.elsantoregalapines.com/
-        selenium.open("/");
-
-        // Wait for page to load
-        selenium.waitForPageToLoad("30000");
-
-        // Flash code from here
-
         // Create random forms
-
-        final List<Form> forms = FormGenerator.generateForms(10);
+        final List<Form> forms = FormGenerator.generateForms(MAX_PINS);
+        
         for (Form form : forms) {
+        	// Open http://www.elsantoregalapines.com/
+            selenium.open("/");
+
+            // Wait for page to load
+            selenium.waitForPageToLoad("30000");
+            
             completeForm(form);
         }
     }
@@ -97,5 +100,16 @@ public class PinsGatherer extends SeleneseTestCase {
     private String recoverPin() {
         return SikuliScripts.getScripts().recoverPin();
 	}
-
+    
+    private void collectPinFromEmail(Form form) {
+    	
+    	// Get form's email
+    	String email = form.getMail();
+    	
+    	// Build email url
+    	String url = "http://" + email + ".mailinator.com";
+    	
+    	
+    	
+    }
 }
