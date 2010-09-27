@@ -6,9 +6,9 @@ import java.awt.datatransfer.Transferable;
 import java.io.File;
 import java.io.IOException;
 
-public class SikuliScripts {
+import pinsgatherer.helper.PropertiesManager;
 
-    private final static String SIKULI_PATH = "\"C:\\Program Files\\Sikuli\\Sikuli-IDE.exe\"";
+public class SikuliScripts {
 
     private static SikuliScripts instance = new SikuliScripts();
     public static SikuliScripts getScripts() {
@@ -38,8 +38,9 @@ public class SikuliScripts {
     }
 
     private boolean runScript(String script, String params) {
+    	String sikuliPath = PropertiesManager.getProperty("pinsgatherer.sikuli_path");
         try {
-            Process sikuli = Runtime.getRuntime().exec(SIKULI_PATH + " \"" + new File(script).getCanonicalPath() + "\" " + params);
+            Process sikuli = Runtime.getRuntime().exec(sikuliPath + " \"" + new File(script).getCanonicalPath() + "\" " + params);
             int retVal = -1;
             try {
                 retVal = sikuli.waitFor();
