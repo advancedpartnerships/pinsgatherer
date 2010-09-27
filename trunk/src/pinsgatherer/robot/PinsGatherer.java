@@ -32,7 +32,7 @@ public class PinsGatherer extends SeleneseTestCase {
         // Create a browser instance
         try {
             ServerManager.start();
-            selenium = new DefaultSelenium("localhost", 4444, "*firefox", "http://www.elsantoregalapines.com");
+            selenium = new DefaultSelenium("localhost", 4444, "*chrome", "http://www.elsantoregalapines.com");
             selenium.start();
             selenium.windowFocus();
             selenium.windowMaximize();
@@ -71,7 +71,12 @@ public class PinsGatherer extends SeleneseTestCase {
             
             completeForm(form);
         }*/
+        selenium.open("/");
+        selenium.waitForPageToLoad("30000");
         completeForm(forms.get(0));
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {}
     }
 
     /**

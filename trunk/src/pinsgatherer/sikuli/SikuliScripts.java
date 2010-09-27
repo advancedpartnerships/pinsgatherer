@@ -16,7 +16,7 @@ public class SikuliScripts {
     }
 
     public boolean completeForm(String params)  {
-        return runScript("register.skl", params);
+        return runScript("register.skl", params) & runScript("additional.skl", params);
     }
 
     public String recoverPin() {
