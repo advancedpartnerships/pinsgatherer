@@ -10,8 +10,6 @@ import pinsgatherer.data.FormGenerator;
 import pinsgatherer.server.ServerManager;
 import pinsgatherer.sikuli.SikuliScripts;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.List;
 
 /**
@@ -72,7 +70,6 @@ public class PinsGatherer extends SeleneseTestCase {
         for (Form form : forms) {
             completeForm(form);
         }
-
     }
 
     /**
@@ -86,8 +83,12 @@ public class PinsGatherer extends SeleneseTestCase {
      * @return true if feasible to success, false otherwise.
      */
     private boolean completeForm(Form form) {
-        return SikuliScripts.getScripts().completeForm(form.getDni(), form.getMail(), form.getCellPhone());
+        return SikuliScripts.getScripts().completeForm(computeParams(form));
 	}
+
+    private String computeParams(Form form) {
+        return form.getSurname() + " " + form.getName() + " " + form.getDni() + " " + form.getMail() + " " + form.getBirthdateDay() + " " + form.getBirthdateMonth() + " " + form.getBirthdateYear() + " " + form.getCellPhone() + " " + form.getSport() + " " + form.getHobbieSport();
+    }
 
     /**
      * Call after the emailed url is opened
