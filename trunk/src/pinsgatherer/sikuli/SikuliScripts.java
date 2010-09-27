@@ -16,7 +16,7 @@ public class SikuliScripts {
     }
 
     public boolean completeForm(String dni, String mail, String cel)  {
-        return runScript("register.skl");
+        return runScript("register.skl", dni + " " + mail + " " + cel);
     }
 
     public String recoverPin() {
@@ -33,9 +33,13 @@ public class SikuliScripts {
         return null;
     }
 
-    private boolean runScript(String name) {
+    private boolean runScript(String script) {
+        return runScript(script, "");
+    }
+
+    private boolean runScript(String script, String params) {
         try {
-            Process sikuli = Runtime.getRuntime().exec(SIKULI_PATH + " \"" + new File(name).getCanonicalPath() + '\"');
+            Process sikuli = Runtime.getRuntime().exec(SIKULI_PATH + " \"" + new File(script).getCanonicalPath() + "\" " + params);
             int retVal = -1;
             try {
                 retVal = sikuli.waitFor();
