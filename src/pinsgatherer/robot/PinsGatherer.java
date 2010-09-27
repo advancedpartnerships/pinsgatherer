@@ -74,13 +74,6 @@ public class PinsGatherer extends SeleneseTestCase {
             
             storePin(form);
         }
-        
-//        selenium.open("/");
-//        selenium.waitForPageToLoad("30000");
-//        completeForm(forms.get(0));
-//        try {
-//            Thread.sleep(5000);
-//        } catch (InterruptedException e) {}
     }
 
     /**
@@ -146,10 +139,8 @@ public class PinsGatherer extends SeleneseTestCase {
         // Wait for page to load
         selenium.waitForPageToLoad("30000");
             	
-    	// TODO dani's flash code to get the pin
-        
         // Store pin
-    	String pin = null;
+    	String pin = recoverPin();
     	PinStorage.addPin(email, pin);
     }
     
