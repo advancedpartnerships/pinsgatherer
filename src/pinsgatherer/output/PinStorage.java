@@ -24,7 +24,7 @@ public class PinStorage {
 		
 		// Append
 		root.appendChild(newElement);
-		XMLHelper.writeXmlFile(document, PropertiesManager.getProperty("pins_filename"));
+		XMLHelper.writeXmlFile(document, PropertiesManager.getProperty("pinsgatherer.pins_filename"));
 	}
 	
 	// Kind of Singleton for the document, create on demand
