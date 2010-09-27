@@ -1,19 +1,17 @@
 package pinsgatherer.robot;
 
-import java.util.List;
-
+import com.thoughtworks.selenium.DefaultSelenium;
+import com.thoughtworks.selenium.SeleneseTestCase;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
 import pinsgatherer.data.Form;
 import pinsgatherer.data.FormGenerator;
 import pinsgatherer.output.PinStorage;
 import pinsgatherer.server.ServerManager;
 import pinsgatherer.sikuli.SikuliScripts;
 
-import com.thoughtworks.selenium.DefaultSelenium;
-import com.thoughtworks.selenium.SeleneseTestCase;
+import java.util.List;
 
 /**
  * This class simulates a person opening http://www.elsantoregalapines.com/,
@@ -35,7 +33,7 @@ public class PinsGatherer extends SeleneseTestCase {
         // Create a browser instance
         try {
             ServerManager.start();
-            selenium = new DefaultSelenium("localhost", 4444, "*firefox", "http://www.elsantoregalapines.com");
+            selenium = new DefaultSelenium("localhost", 4444, "*chrome", "http://www.elsantoregalapines.com");
             selenium.start();
             selenium.windowFocus();
             selenium.windowMaximize();
@@ -62,20 +60,18 @@ public class PinsGatherer extends SeleneseTestCase {
 
     @Test
     public void testPinsGatherer() {
-    	// Open http://www.elsantoregalapines.com/
-        selenium.open("/");
-
-        // Wait for page to load
-        selenium.waitForPageToLoad("30000");
-    	
         // Create random forms
         final List<Form> forms = FormGenerator.generateForms(MAX_PINS);
         
         for (Form form : forms) {
-            // Complete form
+        	// Open http://www.elsantoregalapines.com/
+            selenium.open("/");
+
+            // Wait for page to load
+            selenium.waitForPageToLoad("30000");
+            
             completeForm(form);
             
-            // Collect and store pin
             storePin(form);
         }
         
@@ -97,7 +93,6 @@ public class PinsGatherer extends SeleneseTestCase {
      * @param form A form with valid and unique dni, mail and cellphone fields.
      * @return true if feasible to success, false otherwise.
      */
-    
     private boolean completeForm(Form form) {
         return SikuliScripts.getScripts().completeForm(computeParams(form));
 	}
