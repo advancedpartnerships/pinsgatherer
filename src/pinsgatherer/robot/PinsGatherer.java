@@ -24,6 +24,7 @@ public class PinsGatherer extends SeleneseTestCase {
 	
 	// Available pins.
 	private static final int MAX_PINS = 150000;
+	private static final int REFRESH_INTERVAL = 10; // Seconds
 
     /**
      * This method runs before the class is executed. It starts the selenium server
@@ -169,7 +170,7 @@ public class PinsGatherer extends SeleneseTestCase {
 
 	private void openEmail(String emailLinkLocator) throws NoEmailException {
 		try {
-			waitForElement(emailLinkLocator, "30000");
+			waitForElement(emailLinkLocator, "60000", true, REFRESH_INTERVAL);
 		} catch (ElementNotFoundException e) {
 			throw new NoEmailException();
 		}
@@ -193,6 +194,10 @@ public class PinsGatherer extends SeleneseTestCase {
     }
     
     private void waitForElement(String locator, String timeout) throws ElementNotFoundException {
+    	waitForElement(locator, timeout, false, 0);
+    }
+    
+    private void waitForElement(String locator, String timeout, boolean refresh, int refreshInterval) throws ElementNotFoundException {
     	int seconds = Integer.valueOf(timeout) / 1000;
     	for (int second = 0;; second++) {
     		if (second >= seconds) {
@@ -200,6 +205,11 @@ public class PinsGatherer extends SeleneseTestCase {
     		}
     		if (selenium.isElementPresent(locator)) {
     			break;
+    		} else {
+    			if (refresh && (second % refreshInterval == 0)) {
+    				selenium.refresh();
+    				selenium.waitForPageToLoad("30000");
+    			}
     		}
     		try {
 				Thread.sleep(1000);
