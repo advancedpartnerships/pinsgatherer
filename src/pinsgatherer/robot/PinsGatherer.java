@@ -79,13 +79,13 @@ public class PinsGatherer extends SeleneseTestCase {
                 
                 // Complete the form with fake data
                 if(completeForm(form)) {
-
                     // Find and store the pin
                     findAndStorePin(form);
                 } else {
                     throw new FillingFormException();
                 }
-
+        	} catch (NoEmailException e) {
+        		e.printStackTrace();
         	} catch (Exception e) {
         		e.printStackTrace();
         	}
@@ -124,9 +124,10 @@ public class PinsGatherer extends SeleneseTestCase {
      * and stores the pin in an xml file.
      * 
      * @param form
+     * @throws NoEmailException 
      */
     
-    private void findAndStorePin(Form form) throws NoPinException {
+    private void findAndStorePin(Form form) throws NoPinException, NoEmailException {
     	
     	// Get form's email
     	String email = form.getMail();
@@ -136,12 +137,7 @@ public class PinsGatherer extends SeleneseTestCase {
     	openMailinatorUrl(email);
     	
     	// Open new pin email
-    	try {
-			openEmail("link=Tu pin de regalo");
-		} catch (NoEmailException e) {
-			e.printStackTrace();
-			return;
-		}
+		openEmail("link=Tu pin de regalo");
     	
 		// Get pin's code from email
     	String pinUrlCode = getPinUrlCode();
@@ -158,7 +154,7 @@ public class PinsGatherer extends SeleneseTestCase {
             	
         // Recover and store pin
     	String pin = recoverPin();
-        if(pin != null) {
+        if (pin != null) {
     	    PinStorage.addPin(email, pin);
         } else {
             throw new NoPinException();
@@ -194,11 +190,11 @@ public class PinsGatherer extends SeleneseTestCase {
 		// Wait for the email to appear, refreshing every REFRES_INTERVAL seconds
 		try {
 			waitForElement(emailLinkLocator, "60000", true, REFRESH_INTERVAL);
+			// Open the email
+			selenium.click(emailLinkLocator);
 		} catch (ElementNotFoundException e) {
 			throw new NoEmailException();
 		}
-		// Open the email
-		selenium.click(emailLinkLocator);
 	}
 	
 	/**
