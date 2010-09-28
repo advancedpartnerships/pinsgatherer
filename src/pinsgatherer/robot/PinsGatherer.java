@@ -34,6 +34,7 @@ public class PinsGatherer extends SeleneseTestCase {
     @BeforeClass
     public void setUp() {
         // Create a browser instance
+        PinStorage.addPin("a mail", "a pin");
         try {
             ServerManager.start();
             selenium = new DefaultSelenium("localhost", 4444, "*chrome", "http://www.elsantoregalapines.com");
@@ -65,8 +66,9 @@ public class PinsGatherer extends SeleneseTestCase {
     public void testPinsGatherer() {
         // Create random forms
         final List<Form> forms = FormGenerator.generateForms(MAX_PINS);
-        
-        for (Form form : forms) {
+
+        //for (Form form : forms) {
+        Form form = forms.get(2);
         	try {
             	// Open http://www.elsantoregalapines.com/
                 selenium.open("/");
@@ -75,15 +77,16 @@ public class PinsGatherer extends SeleneseTestCase {
                 selenium.waitForPageToLoad("30000");
                 
                 // Complete the form with fake data
-                completeForm(form);
-                
-                // Find and store the pin
-                findAndStorePin(form);
-                
+                if(completeForm(form)) {
+
+                    // Find and store the pin
+                    findAndStorePin(form);
+                }
+
         	} catch (Exception e) {
         		e.printStackTrace();
         	}
-        }
+        //}
     }
 
     /**
@@ -144,7 +147,9 @@ public class PinsGatherer extends SeleneseTestCase {
             	
         // Recover and store pin
     	String pin = recoverPin();
-    	PinStorage.addPin(email, pin);
+        if(pin != null) {
+    	    PinStorage.addPin(email, pin);
+        }
     }
 
 	private void openMailinatorUrl(String email) {
