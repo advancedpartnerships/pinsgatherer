@@ -8,7 +8,9 @@ import org.junit.Test;
 import pinsgatherer.data.Form;
 import pinsgatherer.data.FormGenerator;
 import pinsgatherer.exceptions.ElementNotFoundException;
+import pinsgatherer.exceptions.FillingFormException;
 import pinsgatherer.exceptions.NoEmailException;
+import pinsgatherer.exceptions.NoPinException;
 import pinsgatherer.output.PinStorage;
 import pinsgatherer.server.ServerManager;
 import pinsgatherer.sikuli.SikuliScripts;
@@ -34,7 +36,6 @@ public class PinsGatherer extends SeleneseTestCase {
     @BeforeClass
     public void setUp() {
         // Create a browser instance
-        PinStorage.addPin("a mail", "a pin");
         try {
             ServerManager.start();
             selenium = new DefaultSelenium("localhost", 4444, "*chrome", "http://www.elsantoregalapines.com");
@@ -81,6 +82,8 @@ public class PinsGatherer extends SeleneseTestCase {
 
                     // Find and store the pin
                     findAndStorePin(form);
+                } else {
+                    throw new FillingFormException();
                 }
 
         	} catch (Exception e) {
@@ -115,7 +118,7 @@ public class PinsGatherer extends SeleneseTestCase {
         return SikuliScripts.getScripts().recoverPin();
 	}
     
-    private void findAndStorePin(Form form) {
+    private void findAndStorePin(Form form) throws NoPinException {
     	
     	// Get form's email
     	String email = form.getMail();
@@ -149,6 +152,8 @@ public class PinsGatherer extends SeleneseTestCase {
     	String pin = recoverPin();
         if(pin != null) {
     	    PinStorage.addPin(email, pin);
+        } else {
+            throw new NoPinException();
         }
     }
 
