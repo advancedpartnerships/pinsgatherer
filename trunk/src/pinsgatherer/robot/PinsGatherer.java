@@ -182,12 +182,22 @@ public class PinsGatherer extends SeleneseTestCase {
     	selenium.selectWindow("mailinator");
 	}
 	
+	/**
+	 * 
+	 * Opens the pin's email
+	 * 
+	 * @param emailLinkLocator the email's xpath locator
+	 * @throws NoEmailException if the email wasn't found
+	 */
+	
 	private void openEmail(String emailLinkLocator) throws NoEmailException {
+		// Wait for the email to appear, refreshing every REFRES_INTERVAL seconds
 		try {
 			waitForElement(emailLinkLocator, "60000", true, REFRESH_INTERVAL);
 		} catch (ElementNotFoundException e) {
 			throw new NoEmailException();
 		}
+		// Open the email
 		selenium.click(emailLinkLocator);
 	}
 	
