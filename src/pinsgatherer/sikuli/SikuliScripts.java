@@ -17,14 +17,7 @@ public class SikuliScripts {
     }
 
     public boolean completeForm(String params)  {
-        pasteToClipboard("OK");
-        if(runScript("register.skl", params) && runScript("additional.skl", params)) {
-            String feedback = copyFromClipboard();
-            if("OK".equals(feedback)) {
-                return true;
-            }
-        }
-        return false;
+        return runScript("register.skl", params) && runScript("additional.skl", params);
     }
 
     public String recoverPin() {
