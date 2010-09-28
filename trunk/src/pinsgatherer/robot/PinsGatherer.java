@@ -68,8 +68,7 @@ public class PinsGatherer extends SeleneseTestCase {
         // Create random forms
         final List<Form> forms = FormGenerator.generateForms(MAX_PINS);
 
-        //for (Form form : forms) {
-        Form form = forms.get(4);
+        for (Form form : forms) {
         	try {
             	// Open http://www.elsantoregalapines.com/
                 selenium.open("/");
@@ -89,7 +88,7 @@ public class PinsGatherer extends SeleneseTestCase {
         	} catch (Exception e) {
         		e.printStackTrace();
         	}
-        //}
+        }
     }
 
     /**
