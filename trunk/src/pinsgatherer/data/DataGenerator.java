@@ -14,15 +14,15 @@ import java.util.Random;
 public class DataGenerator {
 	
 	private final List<String> names = new ArrayList<String>(
-			Arrays.asList("Diego", "Martin", "Carlos")
+			Arrays.asList("Juan", "Pedro", "Santiago", "Daniel", "Gasto", "Tomas", "Maximiliano", "Jimena", "Delfina", "Julieta", "Lucia", "Luciana", "Ludmila", "Lujan", "Lourdes")
 	);
-	
+
 	private final List<String> surnames = new ArrayList<String>(
-			Arrays.asList("Perez", "Donofilio", "Arota")
+			Arrays.asList("Moix", "Capanegra", "Vago", "Ferreiro", "Telpuk", "Kupelian", "Martinez", "Fredes", "Ferrari", "Frank", "Gutierrez", "Fiel")
 	);
 
 	private final List<String> provinces = new ArrayList<String>(
-			Arrays.asList("Jujuy", "Formosa", "Misiones")
+			Arrays.asList("Capital Federal")
 	);
 	
 	private final List<String> teams = new ArrayList<String>(
@@ -30,7 +30,7 @@ public class DataGenerator {
 	);
 	
 	private final List<String> sports = new ArrayList<String>(
-			Arrays.asList("Futbol", "Hockey", "Rugby")
+			Arrays.asList("Futbol", "Hockey", "Rugby", "Polo", "Tenis", "Ajedrez", "Pingpong", "Handball", "Football", "Basquet")
 	);
 	
 	public String getRandomName() {
