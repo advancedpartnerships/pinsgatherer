@@ -118,6 +118,14 @@ public class PinsGatherer extends SeleneseTestCase {
         return SikuliScripts.getScripts().recoverPin();
 	}
     
+    /**
+     * 
+     * Call after the form has been submitted. Opens mailinator, parses the mail
+     * and stores the pin in an xml file.
+     * 
+     * @param form
+     */
+    
     private void findAndStorePin(Form form) throws NoPinException {
     	
     	// Get form's email
@@ -156,6 +164,13 @@ public class PinsGatherer extends SeleneseTestCase {
             throw new NoPinException();
         }
     }
+    
+    /**
+     * 
+     * Open a mailinator account in a new window.
+     * 
+     * @param email the account
+     */
 
 	private void openMailinatorUrl(String email) {
 		// Build email url
@@ -166,25 +181,22 @@ public class PinsGatherer extends SeleneseTestCase {
     	selenium.waitForPopUp("mailinator", "30000");
     	selenium.selectWindow("mailinator");
 	}
-
-	private String getEmailContent() {
-		String emailContentLoctor = "//div[@id='message']";
-    	try {
-			waitForElement(emailContentLoctor, "30000");
-		} catch (ElementNotFoundException e) {
-			e.printStackTrace();
-			return null;
-		}
-		return selenium.getText(emailContentLoctor);
-	}
-
+	
 	private void openEmail(String emailLinkLocator) throws NoEmailException {
 		try {
 			waitForElement(emailLinkLocator, "60000", true, REFRESH_INTERVAL);
 		} catch (ElementNotFoundException e) {
 			throw new NoEmailException();
 		}
+		selenium.click(emailLinkLocator);
 	}
+	
+	/**
+	 * 
+	 * Call after the email has been open. Parses the email content and get the pin's url.
+	 * 
+	 * @return the pins url code
+	 */
     
     private String getPinUrlCode() {
     	// Get email content
@@ -203,9 +215,38 @@ public class PinsGatherer extends SeleneseTestCase {
     	return code;
     }
     
+	/**
+	 * 
+	 * Gets the email content of an mailinator email. Call after the email has been opened.
+	 * 
+	 * @return the content of the email
+	 */
+
+	private String getEmailContent() {
+		String emailContentLoctor = "//div[@id='message']";
+    	try {
+			waitForElement(emailContentLoctor, "30000");
+		} catch (ElementNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
+		return selenium.getText(emailContentLoctor);
+	}
+    
     private void waitForElement(String locator, String timeout) throws ElementNotFoundException {
     	waitForElement(locator, timeout, false, 0);
     }
+    
+    /**
+     * 
+     * Waits for an html element to appear in the dom
+     * 
+     * @param locator the element locator
+     * @param timeout the time to wait the element
+     * @param refresh a flag to indicate if the page should be refreshed
+     * @param refreshInterval  the interval of page refresh
+     * @throws ElementNotFoundException
+     */
     
     private void waitForElement(String locator, String timeout, boolean refresh, int refreshInterval) throws ElementNotFoundException {
     	int seconds = Integer.valueOf(timeout) / 1000;
