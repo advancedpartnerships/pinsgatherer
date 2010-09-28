@@ -1,12 +1,13 @@
 package pinsgatherer.sikuli;
 
+import pinsgatherer.helper.PropertiesManager;
+
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.io.File;
 import java.io.IOException;
-
-import pinsgatherer.helper.PropertiesManager;
 
 public class SikuliScripts {
 
@@ -16,18 +17,39 @@ public class SikuliScripts {
     }
 
     public boolean completeForm(String params)  {
-        return runScript("register.skl", params) & runScript("additional.skl", params);
+        pasteToClipboard("OK");
+        if(runScript("register.skl", params) && runScript("additional.skl", params)) {
+            String feedback = copyFromClipboard();
+            if("OK".equals(feedback)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public String recoverPin() {
+        pasteToClipboard("ERROR");
         if(runScript("recover.skl")) {
-            Transferable contents = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
-            if(contents.isDataFlavorSupported(DataFlavor.stringFlavor)) {
-                try {
-                    return (String)contents.getTransferData(DataFlavor.stringFlavor);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            String pin = copyFromClipboard();
+            if(!"ERROR".equals(pin)) {
+                return pin;
+            }
+        }
+        return null;
+    }
+
+    private void pasteToClipboard(String contents) {
+        StringSelection transferable = new StringSelection(contents);
+        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(transferable, transferable);
+    }
+
+    private String copyFromClipboard() {
+        Transferable contents = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
+        if(contents.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+            try {
+                return (String)contents.getTransferData(DataFlavor.stringFlavor);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
         return null;
