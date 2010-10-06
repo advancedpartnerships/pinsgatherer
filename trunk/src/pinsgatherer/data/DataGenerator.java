@@ -14,7 +14,7 @@ import java.util.Random;
 public class DataGenerator {
 	
 	private final List<String> names = new ArrayList<String>(
-			Arrays.asList("Juan", "Pedro", "Santiago", "Daniel", "Gasto", "Tomas", "Maximiliano", "Jimena", "Delfina", "Julieta", "Lucia", "Luciana", "Ludmila", "Lujan", "Lourdes")
+			Arrays.asList("Jorge", "Sopenco", "Gandalf", "Froddo", "Juan", "Pedro", "Santiago", "Daniel", "Gasto", "Tomas", "Maximiliano", "Jimena", "Delfina", "Julieta", "Lucia", "Luciana", "Ludmila", "Lujan", "Lourdes")
 	);
 
 	private final List<String> surnames = new ArrayList<String>(

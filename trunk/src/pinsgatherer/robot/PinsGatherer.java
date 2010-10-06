@@ -77,14 +77,12 @@ public class PinsGatherer extends SeleneseTestCase {
                 selenium.waitForPageToLoad("30000");
                 
                 // Complete the form with fake data
-                if(completeForm(form)) {
+                if (completeForm(form)) {
                     // Find and store the pin
                     findAndStorePin(form);
                 } else {
                     throw new FillingFormException();
                 }
-        	} catch (NoEmailException e) {
-        		e.printStackTrace();
         	} catch (Exception e) {
         		e.printStackTrace();
         	}
@@ -126,7 +124,7 @@ public class PinsGatherer extends SeleneseTestCase {
      * @throws NoEmailException 
      */
     
-    private void findAndStorePin(Form form) throws NoPinException, NoEmailException {
+    private void findAndStorePin(Form form) throws NoPinException {
     	
     	// Get form's email
     	String email = form.getMail();
@@ -136,7 +134,15 @@ public class PinsGatherer extends SeleneseTestCase {
     	openMailinatorUrl(email);
     	
     	// Open new pin email
-		openEmail("link=Tu pin de regalo");
+		try {
+			openEmail("link=Tu pin de regalo");
+		} catch (NoEmailException e) {
+			// Close mailinator and return to previous window
+	    	selenium.close();
+	    	selenium.selectWindow("null");
+			e.printStackTrace();
+			return;
+		}
     	
 		// Get pin's code from email
     	String pinUrlCode = getPinUrlCode();
@@ -175,6 +181,8 @@ public class PinsGatherer extends SeleneseTestCase {
     	selenium.openWindow(url, "mailinator");
     	selenium.waitForPopUp("mailinator", "30000");
     	selenium.selectWindow("mailinator");
+    	
+    	
 	}
 	
 	/**
